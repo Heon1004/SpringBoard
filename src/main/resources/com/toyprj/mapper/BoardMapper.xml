@@ -11,7 +11,10 @@
 
 	<!-- enroll Baord -->
 	<insert id="enroll">
-		insert into board(title, content, writer) values(#{title}, #{content}, #{writer})
+		insert into board(title, content, writer) values(#{title}, #{content}, #{writer});
 	</insert>
+	<select id="getList" resultType="com.toyprj.model.BoardVO">
+		select * from board;
+	</select>
 
 </mapper>

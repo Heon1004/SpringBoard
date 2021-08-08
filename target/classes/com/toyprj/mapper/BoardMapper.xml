@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace = Mapper 인터페이스의 경로를 포함하는 인터페이스의 이름을 작성 -->
+<mapper namespace="com.toyprj.mapper.BoardMapper">
+	<!-- 값이 들어가야 할 구문에는 Mapper 인터페이스에서 선언한 enroll() 메서드의 파라미터 BoardVO 클래스의 멤버변수명을 
+		#{}을 붙여서 작성합니다. "#{title}"의 경우 getTitle()/setTtile()을 의미 합니다. 따라서 BoardVO 멤버 
+		변수인 title, content, writer에 값이 담긴 경우 그 값들이 각각 #{title}, #{content}, #{writer} 
+		대체하여 SQL문이 실행됩니다. -->
+
+	<!-- enroll Baord -->
+	<insert id="enroll">
+		insert into board(title, content, writer) values(#{title}, #{content}, #{writer})
+	</insert>
+
+</mapper>

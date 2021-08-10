@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.toyprj.model.BoardVO;
+import com.toyprj.model.Criteria;
+import com.toyprj.model.PageMakerDTO;
 import com.toyprj.service.BoardService;
 
 /*@Controller 어노테이션의 경우 해당 클래스를 스프링의 빈으로 인식하도록 하기 위함이고, 
@@ -28,14 +30,15 @@ public class BoardController {
 
 	@GetMapping("/list")
 	// => @RequestMapping(value="list", method=RequestMethod.GET)
-	public void boardListGET(Model model) {
+	public void boardListGET(Model model, Criteria cri) {
 		log.info("게시판 목록 페이지 진입");
 		
-		model.addAttribute("list",bservice.getList());
+		model.addAttribute("list", bservice.getListPaging(cri));
+		int total = bservice.getTotal();
+        model.addAttribute("pageMaker", new PageMakerDTO(cri, total));
 	}
 
 	@GetMapping("/enroll")
-	// => @RequestMapping(value="enroll", method=RequestMethod.GET)
 	public void boardEnrollGET() {
 		log.info("掲示板投稿ページへ");
 	}
@@ -49,9 +52,43 @@ public class BoardController {
 		bservice.enroll(board);
 
 		// 데이터 전송을 위한 메서드로서 addFlashAttribute()을 사용한 이유는 일회성으로만 데이터를 전달하기 위함
-		rttr.addFlashAttribute("result", "enrol success");
+		rttr.addFlashAttribute("sysmsg", "enrol success");
 
 		return "redirect:/customer/board/list";
 
 	}
+	 /* 게시판 조회 */
+    @GetMapping("/get")
+    public void boardGetPageGET(int bno, Model model) {
+        
+        model.addAttribute("pageInfo", bservice.getPage(bno));
+        
+    }
+    @PostMapping("/modifyPage")
+    public void boardModifyGET(int bno, Model model) {
+        
+        model.addAttribute("pageInfo", bservice.getPage(bno));
+        
+    }
+    /* 페이지 수정 */
+    @PostMapping("/modify")
+    public String boardModifyPOST(BoardVO board, RedirectAttributes rttr) {
+        
+        bservice.modify(board);
+        
+        rttr.addFlashAttribute("sysmsg", "modify success");
+        
+        return "redirect:/customer/board/list";
+        
+    }
+    
+    @PostMapping("delete")
+    public String boardDeletePOST(int bno, RedirectAttributes rttr) {
+    	bservice.delete(bno);
+    	rttr.addFlashAttribute("sysmsg", "delete success");
+    	
+    	return "redirect:/customer/board/list";
+    }
+    
+    
 }

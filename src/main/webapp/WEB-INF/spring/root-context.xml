@@ -17,17 +17,21 @@
 		<property name="username" value="root" />
 		<property name="password" value="1041" />
 	</bean>
-
+	
+	<!-- 커넥션 pool을 사용 할 datasource bean 셋팅 -->
 	<bean id="datasource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
 		<constructor-arg ref="hikariConfig" />
 	</bean>
-
+	
+	<!-- DB connection 및 SQL전달/리턴을 위한 SQLSession을 만들어내는 SQLSessionFactory bean 셋팅 -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="datasource" />
 	</bean>
-
+	<!-- base-package에 정의된 package 내 클래스 및 xml을 SQL 처리를 위한 mapper로 인식 -->
 	<mybatis-spring:scan base-package="com.toyprj.mapper" />
-	<context:component-scan base-package="com.toyprj.model" />
-	<context:component-scan base-package="com.toyprj.service" />
-
+	
+	<!-- base-package에 정의된 package 내 소스 중 @Component가 작성된 클래스를 bean으로 인식 -->
+	<context:component-scan base-package="com.toyprj.model,com.toyprj.service" />
+	
+	
 </beans>
